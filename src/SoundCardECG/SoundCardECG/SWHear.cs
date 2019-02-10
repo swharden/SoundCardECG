@@ -93,10 +93,11 @@ namespace SoundCardECG
             wvin.StopRecording();
         }
 
+        public double mult = -1;
         private void OnDataAvailable(object sender, WaveInEventArgs args)
         {
             for (int i = 0; i < bufferSampleCount; i++)
-                bufferSingle[i] = BitConverter.ToInt16(args.Buffer, i * bytesPerSample);
+                bufferSingle[i] = BitConverter.ToInt16(args.Buffer, i * bytesPerSample) * mult;
             double amplitude = bufferSingle.Max() - bufferSingle.Min();
             amplitudesByBuffer[nextBufferToFill] = amplitude;
             bufferSingle.CopyTo(pcmDataCircular, nextBufferToFill * bufferSampleCount);
