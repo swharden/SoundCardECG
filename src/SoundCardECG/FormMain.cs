@@ -18,35 +18,14 @@ namespace SoundCardECG
         public FormMain()
         {
             InitializeComponent();
-
-            scottPlotUC1.plt.settings.figureBgColor = SystemColors.Control;
-            scottPlotUC1.plt.settings.axisLabelY = "Signal (PCM)";
-            scottPlotUC1.plt.settings.axisLabelX = "Time (seconds)";
-            scottPlotUC1.plt.settings.title = "ECG Signal";
-
-            scottPlotUC2.plt.settings.figureBgColor = SystemColors.Control;
-            scottPlotUC2.plt.settings.axisLabelY = "Heart Rate (BPM)";
-            scottPlotUC2.plt.settings.axisLabelX = "Time (seconds)";
-            scottPlotUC2.plt.settings.title = "Heart Beat Detection";
+            enabledToolStripMenuItem_Click(null, null); // disable heartbeat detection by default
+            StyleGraphs();
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
             //SelectSoundCard();
-            StartListening(0);
-        }
-
-        private void StartListening(int deviceNumber)
-        {
-            ecg = new ECG(deviceNumber);
-            while (ecg.values == null)
-                System.Threading.Thread.Sleep(10);
-
-            scottPlotUC1.plt.data.Clear();
-            scottPlotUC1.plt.data.AddSignal(ecg.values, ecg.SAMPLERATE);
-            scottPlotUC1.plt.data.AddHorizLine(ecg.beatThreshold);
-
-            timer1.Enabled = true;
+            StartListening();
         }
 
         private void SelectSoundCard()
@@ -62,8 +41,81 @@ namespace SoundCardECG
             if (deviceNumber < 0)
                 MessageBox.Show("No input device was selected, so nothing will be graphed.", "ERROR");
             else
-                StartListening(deviceNumber);
+                StartListening();
         }
+
+        public int deviceNumber;
+        private void StartListening()
+        {
+            // stop the old listener if it's running
+            if (ecg != null)
+                ecg.Stop();
+
+            // start a new listener
+            ecg = new ECG(deviceNumber);
+            ecg.beatThreshold = (int)nudThreshold.Value;
+
+            while (ecg.values == null)
+                System.Threading.Thread.Sleep(10);
+
+            scottPlotUC1.plt.data.Clear();
+            scottPlotUC1.plt.data.AddSignal(ecg.values, ecg.SAMPLERATE, lineColor: System.Drawing.ColorTranslator.FromHtml("#d62728"));
+            fullScaleToolStripMenuItem_Click(null, null);
+            timerRenderGraph.Enabled = true;
+        }
+
+        #region graphing
+
+        private void StyleGraphs()
+        {
+            scottPlotUC1.plt.settings.figureBgColor = SystemColors.Control;
+            scottPlotUC1.plt.settings.axisLabelY = "Signal (PCM)";
+            scottPlotUC1.plt.settings.axisLabelX = "Time (seconds)";
+            scottPlotUC1.plt.settings.title = "Sound Card ECG Signal";
+            scottPlotUC1.plt.settings.SetDataPadding(75, 20, null, null);
+            scottPlotUC1.Render();
+
+            scottPlotUC2.plt.settings.figureBgColor = SystemColors.Control;
+            scottPlotUC2.plt.settings.axisLabelY = "Heart Rate (BPM)";
+            scottPlotUC2.plt.settings.axisLabelX = "Time (seconds)";
+            scottPlotUC2.plt.settings.title = "Heart Beat Detection";
+        }
+
+        bool busyRendering = false;
+        private void timerRenderGraph_Tick(object sender, EventArgs e)
+        {
+            if (busyRendering)
+                return;
+
+            busyRendering = true;
+
+            // update lines
+            scottPlotUC1.plt.data.ClearAxisLines();
+            scottPlotUC1.plt.data.AddVertLine((double)ecg.lastPointUpdated / ecg.SAMPLERATE, lineColor: System.Drawing.ColorTranslator.FromHtml("#636363"));
+            if (displayHeartbeats)
+                scottPlotUC1.plt.data.AddHorizLine(ecg.beatThreshold, lineColor: System.Drawing.ColorTranslator.FromHtml("#bcbd22"));
+
+            // update the ECG waveform trace
+            scottPlotUC1.Render();
+
+            // create a new BPM trace from scratch
+            if (displayHeartbeats && ecg.beatTimes != null && ecg.beatTimes.Count > 0)
+            {
+                scottPlotUC2.plt.data.Clear();
+                scottPlotUC2.plt.data.AddScatter(ecg.beatTimes.ToArray(), ecg.beatRates.ToArray());
+                if (cbAutoscale.Checked)
+                    scottPlotUC2.plt.settings.AxisFit();
+                scottPlotUC2.Render();
+                lblBmp.Text = string.Format("{0:0.0} BPM", ecg.beatRates[ecg.beatRates.Count - 1]);
+            }
+
+            Application.DoEvents();
+            busyRendering = false;
+        }
+
+        #endregion
+
+        #region GUI bindings
 
         private void selectToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -86,29 +138,79 @@ namespace SoundCardECG
                 frm.ShowDialog();
         }
 
-        bool busyRendering = false;
-        private void timer1_Tick(object sender, EventArgs e)
+        private bool displayHeartbeats = false;
+        private void enabledToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (busyRendering)
-                return;
-
-            busyRendering = true;
-
-            // update the ECG waveform trace
-            scottPlotUC1.Render();
-
-            // create a new BPM trace from scratch
-            if (ecg.beatTimes != null && ecg.beatTimes.Count > 0)
+            if (enabledToolStripMenuItem.Checked)
             {
-                scottPlotUC2.plt.data.Clear();
-                scottPlotUC2.plt.data.AddScatter(ecg.beatTimes.ToArray(), ecg.beatRates.ToArray());
-                scottPlotUC2.plt.settings.AxisFit();
-                scottPlotUC2.Render();
-                lblBmp.Text = string.Format("{0:0.0} BPM", ecg.beatRates[ecg.beatRates.Count - 1]);
+                displayHeartbeats = true;
+                Height = 766;
             }
-
-            Application.DoEvents();
-            busyRendering = false;
+            else
+            {
+                displayHeartbeats = false;
+                Height = 438;
+            }
+            Console.WriteLine($"Heartbeat detection: {displayHeartbeats}");
         }
+
+        private void autoscalemiddleclickToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            scottPlotUC1.plt.settings.AxisFit(0, .4);
+            scottPlotUC2.plt.settings.AxisFit();
+            scottPlotUC1.Render();
+        }
+
+        private void fullScaleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            scottPlotUC1.plt.settings.AxisFit(0, 0);
+            scottPlotUC1.plt.settings.axisY.Set(-Math.Pow(2, 16) / 2, Math.Pow(2, 16) / 2);
+            scottPlotUC1.Render();
+        }
+
+        private void saveImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog savefile = new SaveFileDialog();
+            savefile.FileName = "Sound Card ECG.png";
+            savefile.Filter = "PNG Files (*.png)|*.png|All files (*.*)|*.*";
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                string saveFilePath = savefile.FileName;
+                scottPlotUC1.plt.figure.Save(saveFilePath);
+            }
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ecg.Stop();
+            timerRenderGraph.Enabled = false;
+        }
+
+        private void startToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartListening();
+        }
+
+        private void nudThreshold_ValueChanged(object sender, EventArgs e)
+        {
+            ecg.beatThreshold = (int)nudThreshold.Value;
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartListening();
+        }
+
+        private void saveCSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog savefile = new SaveFileDialog();
+            savefile.FileName = "Sound Card ECG.csv";
+            savefile.Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*";
+            if (savefile.ShowDialog() == DialogResult.OK)
+                System.IO.File.WriteAllText(savefile.FileName, ecg.GetCSV());
+        }
+
+        #endregion
+
     }
 }

@@ -11,7 +11,7 @@ namespace SoundCardECG
         public int SAMPLERATE = 8000;
         int BITRATE = 16;
         int CHANNELS = 1;
-        int BUFFERMILLISEC = 50;
+        int BUFFERMILLISEC = 20;
         int STORESECONDS = 5;
         int bufferIndex = 0;
         int buffersCaptured = 0;
@@ -69,6 +69,7 @@ namespace SoundCardECG
             Console.WriteLine($"BEAT at {timeSec} sec ({Math.Round(beatRate, 1)} BPM)");
         }
 
+        public int lastPointUpdated = 0;
         private void OnDataAvailable(object sender, NAudio.Wave.WaveInEventArgs args)
         {
             // convert from a 16-bit byte array to a double array
@@ -105,12 +106,21 @@ namespace SoundCardECG
 
             // copy these data into the correct place of the larger buffer
             Array.Copy(bufferValues, 0, values, bufferIndex * valuesInBuffer, bufferValues.Length);
+            lastPointUpdated = bufferIndex * valuesInBuffer + bufferValues.Length;
 
             // update counts
             buffersCaptured += 1;
             bufferIndex += 1;
             if (bufferIndex * valuesInBuffer > values.Length - 1)
                 bufferIndex = 0;
+        }
+
+        public string GetCSV()
+        {
+            string csv = "beat, time (s), rate (bpm)\n";
+            for (int i = 0; i < beatTimes.Count; i++)
+                csv += $"{i + 1}, {Math.Round(beatTimes[i], 3)}, {Math.Round(beatRates[i], 3)}\n";
+            return csv;
         }
     }
 }
