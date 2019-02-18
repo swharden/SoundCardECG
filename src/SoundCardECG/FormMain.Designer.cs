@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,6 +64,8 @@
             this.nudThreshold = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.cbAutoscale = new System.Windows.Forms.CheckBox();
+            this.invertSignalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudThreshold)).BeginInit();
             this.SuspendLayout();
@@ -100,6 +103,8 @@
             // 
             this.soundCardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.invertSignalToolStripMenuItem,
             this.toolStripSeparator1,
             this.startToolStripMenuItem,
             this.stopToolStripMenuItem});
@@ -110,26 +115,26 @@
             // selectToolStripMenuItem
             // 
             this.selectToolStripMenuItem.Name = "selectToolStripMenuItem";
-            this.selectToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.selectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectToolStripMenuItem.Text = "Select Audio Device";
             this.selectToolStripMenuItem.Click += new System.EventHandler(this.selectToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(175, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
@@ -201,7 +206,7 @@
             // 
             this.enabledToolStripMenuItem.CheckOnClick = true;
             this.enabledToolStripMenuItem.Name = "enabledToolStripMenuItem";
-            this.enabledToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.enabledToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.enabledToolStripMenuItem.Text = "Display";
             this.enabledToolStripMenuItem.Click += new System.EventHandler(this.enabledToolStripMenuItem_Click);
             // 
@@ -213,14 +218,14 @@
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // saveCSVToolStripMenuItem
             // 
             this.saveCSVToolStripMenuItem.Name = "saveCSVToolStripMenuItem";
-            this.saveCSVToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveCSVToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.saveCSVToolStripMenuItem.Text = "Save CSV";
             this.saveCSVToolStripMenuItem.Click += new System.EventHandler(this.saveCSVToolStripMenuItem_Click);
             // 
@@ -362,6 +367,19 @@
             this.cbAutoscale.Text = "autoscale";
             this.cbAutoscale.UseVisualStyleBackColor = true;
             // 
+            // invertSignalToolStripMenuItem
+            // 
+            this.invertSignalToolStripMenuItem.CheckOnClick = true;
+            this.invertSignalToolStripMenuItem.Name = "invertSignalToolStripMenuItem";
+            this.invertSignalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.invertSignalToolStripMenuItem.Text = "Invert Signal";
+            this.invertSignalToolStripMenuItem.Click += new System.EventHandler(this.invertSignalToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -379,6 +397,7 @@
             this.Controls.Add(this.scottPlotUC1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "FormMain";
@@ -428,6 +447,8 @@
         private System.Windows.Forms.NumericUpDown nudThreshold;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox cbAutoscale;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem invertSignalToolStripMenuItem;
     }
 }
 

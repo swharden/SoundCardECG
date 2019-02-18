@@ -16,6 +16,7 @@ namespace SoundCardECG
         int bufferIndex = 0;
         int buffersCaptured = 0;
         public int beatThreshold = 3500;
+        public double signalMultiple = 1;
 
         public List<double> beatTimes = new List<double>();
         public List<double> beatRates = new List<double>();
@@ -77,7 +78,7 @@ namespace SoundCardECG
             int valuesInBuffer = args.BytesRecorded / bytesPerValue;
             double[] bufferValues = new double[valuesInBuffer];
             for (int i = 0; i < valuesInBuffer; i++)
-                bufferValues[i] = BitConverter.ToInt16(args.Buffer, i * bytesPerValue);
+                bufferValues[i] = BitConverter.ToInt16(args.Buffer, i * bytesPerValue) * signalMultiple;
 
             // determine if a heartbeat occured
             int j = 0;

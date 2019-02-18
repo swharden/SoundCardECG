@@ -24,14 +24,12 @@ namespace SoundCardECG
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            //SelectSoundCard();
+            SelectSoundCard();
             StartListening();
         }
 
         private void SelectSoundCard()
         {
-            int deviceNumber;
-
             using (FormSoundCard frm = new FormSoundCard())
             {
                 frm.ShowDialog();
@@ -44,7 +42,7 @@ namespace SoundCardECG
                 StartListening();
         }
 
-        public int deviceNumber;
+        public int deviceNumber = 1;
         private void StartListening()
         {
             // stop the old listener if it's running
@@ -105,8 +103,8 @@ namespace SoundCardECG
                 scottPlotUC2.plt.data.AddScatter(ecg.beatTimes.ToArray(), ecg.beatRates.ToArray());
                 if (cbAutoscale.Checked)
                     scottPlotUC2.plt.settings.AxisFit();
-                scottPlotUC2.Render();
                 lblBmp.Text = string.Format("{0:0.0} BPM", ecg.beatRates[ecg.beatRates.Count - 1]);
+                scottPlotUC2.Render();
             }
 
             Application.DoEvents();
@@ -212,5 +210,12 @@ namespace SoundCardECG
 
         #endregion
 
+        private void invertSignalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (invertSignalToolStripMenuItem.Checked)
+                ecg.signalMultiple = -1;
+            else
+                ecg.signalMultiple = 1;
+        }
     }
 }
