@@ -80,6 +80,7 @@ namespace SoundCardECG
         }
 
         bool busyRendering = false;
+        bool useLowpassFiltering = false;
         private void timerRenderGraph_Tick(object sender, EventArgs e)
         {
             if (busyRendering)
@@ -87,14 +88,21 @@ namespace SoundCardECG
 
             busyRendering = true;
 
-            // update lines
-            scottPlotUC1.plt.data.ClearAxisLines();
-            scottPlotUC1.plt.data.AddVertLine((double)ecg.lastPointUpdated / ecg.SAMPLERATE, lineColor: System.Drawing.ColorTranslator.FromHtml("#636363"));
-            if (displayHeartbeats)
-                scottPlotUC1.plt.data.AddHorizLine(ecg.beatThreshold, lineColor: System.Drawing.ColorTranslator.FromHtml("#bcbd22"));
-
             // update the ECG waveform trace
-            scottPlotUC1.Render();
+            if (useLowpassFiltering)
+            {
+                scottPlotUC1.plt.data.Clear();
+                scottPlotUC1.plt.data.AddSignal(ecg.GetFilteredValues(), ecg.SAMPLERATE);
+                scottPlotUC1.Render();
+            }
+            else
+            {
+                scottPlotUC1.plt.data.ClearAxisLines();
+                scottPlotUC1.plt.data.AddVertLine((double)ecg.lastPointUpdated / ecg.SAMPLERATE, lineColor: System.Drawing.ColorTranslator.FromHtml("#636363"));
+                if (displayHeartbeats)
+                    scottPlotUC1.plt.data.AddHorizLine(ecg.beatThreshold, lineColor: System.Drawing.ColorTranslator.FromHtml("#bcbd22"));
+                scottPlotUC1.Render();
+            }
 
             // create a new BPM trace from scratch
             if (displayHeartbeats && ecg.beatTimes != null && ecg.beatTimes.Count > 0)
