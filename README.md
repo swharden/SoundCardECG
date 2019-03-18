@@ -1,7 +1,9 @@
 # Sound Card ECG
 The **Sound Card ECG** program provides a simple interface to view and measure ECG signals obtained through the sound card (using a line-in or microphone jack).
 
-![](src/SoundCardECG/screenshot.png)
+Screenshot | YouTube Demonstration
+---|---
+![](src/SoundCardECG/screenshot.png) | [![SoundCardECG Demonstration](https://github.com/swharden/SoundCardECG/blob/master/graphics/thumb4-play.jpg)](https://youtu.be/sP_-f5nsOEo)
 
 This is my heartbeat rate as I comfortably used the computer, then took a few minutes to watch a scary video (which elevated my heartrate for a few minutes in the middle).
 
