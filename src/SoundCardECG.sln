@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundCardECG", "SoundCardECG\SoundCardECG.csproj", "{BBAA3090-4EB1-4181-B0FC-D35903B2E680}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScottPlot", "..\..\ScottPlot\src\ScottPlot\ScottPlot.csproj", "{2EB18F34-A0C1-4A51-9286-C42DA53668CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{BBAA3090-4EB1-4181-B0FC-D35903B2E680}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBAA3090-4EB1-4181-B0FC-D35903B2E680}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBAA3090-4EB1-4181-B0FC-D35903B2E680}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2EB18F34-A0C1-4A51-9286-C42DA53668CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EB18F34-A0C1-4A51-9286-C42DA53668CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EB18F34-A0C1-4A51-9286-C42DA53668CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EB18F34-A0C1-4A51-9286-C42DA53668CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

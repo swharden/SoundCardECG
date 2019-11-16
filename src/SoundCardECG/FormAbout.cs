@@ -19,7 +19,8 @@ namespace SoundCardECG
 
         private void FormAbout_Load(object sender, EventArgs e)
         {
-            lblVersion.Text = $"version {Properties.Resources.ResourceManager.GetString("version")}";
+            Version ver = typeof(FormAbout).Assembly.GetName().Version;
+            lblVersion.Text = $"version {ver}";
         }
 
         private void label6_Click(object sender, EventArgs e)

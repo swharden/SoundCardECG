@@ -26,6 +26,8 @@ namespace SoundCardECG
         {
             SelectSoundCard();
             StartListening();
+            Version ver = typeof(FormAbout).Assembly.GetName().Version;
+            Text = $"Sound Card ECG {ver.Major}.{ver.Minor}";
         }
 
         private void SelectSoundCard()
@@ -56,8 +58,8 @@ namespace SoundCardECG
             while (ecg.values == null)
                 System.Threading.Thread.Sleep(10);
 
-            scottPlotUC1.plt.data.Clear();
-            scottPlotUC1.plt.data.AddSignal(ecg.values, ecg.SAMPLERATE, lineColor: System.Drawing.ColorTranslator.FromHtml("#d62728"));
+            scottPlotUC1.plt.Clear();
+            scottPlotUC1.plt.PlotSignal(ecg.values, ecg.SAMPLERATE, color: ColorTranslator.FromHtml("#d62728"));
             fullScaleToolStripMenuItem_Click(null, null);
             timerRenderGraph.Enabled = true;
         }
@@ -66,17 +68,14 @@ namespace SoundCardECG
 
         private void StyleGraphs()
         {
-            scottPlotUC1.plt.settings.figureBgColor = SystemColors.Control;
-            scottPlotUC1.plt.settings.axisLabelY = "Signal (PCM)";
-            scottPlotUC1.plt.settings.axisLabelX = "Time (seconds)";
-            scottPlotUC1.plt.settings.title = "Sound Card ECG Signal";
-            scottPlotUC1.plt.settings.SetDataPadding(75, 20, null, null);
+            scottPlotUC1.plt.YLabel("Signal (PCM)");
+            scottPlotUC1.plt.XLabel("Time (seconds)");
+            scottPlotUC1.plt.Title("Sound Card ECG Signal");
             scottPlotUC1.Render();
 
-            scottPlotUC2.plt.settings.figureBgColor = SystemColors.Control;
-            scottPlotUC2.plt.settings.axisLabelY = "Heart Rate (BPM)";
-            scottPlotUC2.plt.settings.axisLabelX = "Time (seconds)";
-            scottPlotUC2.plt.settings.title = "Heart Beat Detection";
+            scottPlotUC2.plt.YLabel("Heart Rate (BPM)");
+            scottPlotUC2.plt.XLabel("Time (seconds)");
+            scottPlotUC2.plt.Title("Heart Beat Detection");
         }
 
         bool busyRendering = false;
@@ -91,26 +90,26 @@ namespace SoundCardECG
             // update the ECG waveform trace
             if (useLowpassFiltering)
             {
-                scottPlotUC1.plt.data.Clear();
-                scottPlotUC1.plt.data.AddSignal(ecg.GetFilteredValues(), ecg.SAMPLERATE);
+                scottPlotUC1.plt.Clear();
+                scottPlotUC1.plt.PlotSignal(ecg.GetFilteredValues(), ecg.SAMPLERATE);
                 scottPlotUC1.Render();
             }
             else
             {
-                scottPlotUC1.plt.data.ClearAxisLines();
-                scottPlotUC1.plt.data.AddVertLine((double)ecg.lastPointUpdated / ecg.SAMPLERATE, lineColor: System.Drawing.ColorTranslator.FromHtml("#636363"));
+                scottPlotUC1.plt.Clear(signalPlots: false);
+                scottPlotUC1.plt.PlotVLine((double)ecg.lastPointUpdated / ecg.SAMPLERATE, color: ColorTranslator.FromHtml("#636363"));
                 if (displayHeartbeats)
-                    scottPlotUC1.plt.data.AddHorizLine(ecg.beatThreshold, lineColor: System.Drawing.ColorTranslator.FromHtml("#bcbd22"));
+                    scottPlotUC1.plt.PlotHLine(ecg.beatThreshold, color: ColorTranslator.FromHtml("#bcbd22"));
                 scottPlotUC1.Render();
             }
 
             // create a new BPM trace from scratch
             if (displayHeartbeats && ecg.beatTimes != null && ecg.beatTimes.Count > 0)
             {
-                scottPlotUC2.plt.data.Clear();
-                scottPlotUC2.plt.data.AddScatter(ecg.beatTimes.ToArray(), ecg.beatRates.ToArray());
+                scottPlotUC2.plt.Clear();
+                scottPlotUC2.plt.PlotScatter(ecg.beatTimes.ToArray(), ecg.beatRates.ToArray());
                 if (cbAutoscale.Checked)
-                    scottPlotUC2.plt.settings.AxisFit();
+                    scottPlotUC2.plt.AxisAuto();
                 lblBmp.Text = string.Format("{0:0.0} BPM", ecg.beatRates[ecg.beatRates.Count - 1]);
                 scottPlotUC2.Render();
             }
@@ -162,15 +161,14 @@ namespace SoundCardECG
 
         private void autoscalemiddleclickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            scottPlotUC1.plt.settings.AxisFit(0, .4);
-            scottPlotUC2.plt.settings.AxisFit();
+            scottPlotUC1.plt.AxisAuto();
             scottPlotUC1.Render();
         }
 
         private void fullScaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            scottPlotUC1.plt.settings.AxisFit(0, 0);
-            scottPlotUC1.plt.settings.axisY.Set(-Math.Pow(2, 16) / 2, Math.Pow(2, 16) / 2);
+            scottPlotUC1.plt.AxisAuto();
+            scottPlotUC1.plt.Axis(y1: -Math.Pow(2, 16) / 2, y2: Math.Pow(2, 16) / 2);
             scottPlotUC1.Render();
         }
 
@@ -182,7 +180,7 @@ namespace SoundCardECG
             if (savefile.ShowDialog() == DialogResult.OK)
             {
                 string saveFilePath = savefile.FileName;
-                scottPlotUC1.plt.figure.Save(saveFilePath);
+                scottPlotUC1.plt.SaveFig(saveFilePath);
             }
         }
 

@@ -53,9 +53,9 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.scottPlotUC1 = new ScottPlotDev2.ScottPlotUC();
+            this.scottPlotUC1 = new ScottPlot.FormsPlot();
             this.timerRenderGraph = new System.Windows.Forms.Timer(this.components);
-            this.scottPlotUC2 = new ScottPlotDev2.ScottPlotUC();
+            this.scottPlotUC2 = new ScottPlot.FormsPlot();
             this.lblBmp = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -421,9 +421,9 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private ScottPlotDev2.ScottPlotUC scottPlotUC1;
+        private ScottPlot.FormsPlot scottPlotUC1;
         private System.Windows.Forms.Timer timerRenderGraph;
-        private ScottPlotDev2.ScottPlotUC scottPlotUC2;
+        private ScottPlot.FormsPlot scottPlotUC2;
         private System.Windows.Forms.Label lblBmp;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem startToolStripMenuItem;
