@@ -37,22 +37,25 @@
     <ApplicationIcon>logo-64.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MathNet.Numerics.4.7.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    <Reference Include="MathNet.Numerics, Version=4.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.9.0\lib\net461\MathNet.Numerics.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio, Version=1.8.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.1.8.5\lib\net35\NAudio.dll</HintPath>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
-    <Reference Include="ScottPlot, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScottPlot.4.0.2\lib\netstandard2.0\ScottPlot.dll</HintPath>
+    <Reference Include="runtime.osx.10.10-x64.CoreCompat.System.Drawing, Version=5.8.64.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\runtime.osx.10.10-x64.CoreCompat.System.Drawing.5.8.64\lib\netstandard2.0\runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll</HintPath>
     </Reference>
-    <Reference Include="ScottPlot.WinForms, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScottPlot.WinForms.4.0.2\lib\net461\ScottPlot.WinForms.dll</HintPath>
+    <Reference Include="ScottPlot, Version=4.0.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScottPlot.4.0.18\lib\netstandard2.0\ScottPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="ScottPlot.WinForms, Version=4.0.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScottPlot.WinForms.4.0.18\lib\net472\ScottPlot.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing.Common, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Drawing.Common.4.6.0\lib\net461\System.Drawing.Common.dll</HintPath>
+      <HintPath>..\packages\System.Drawing.Common.4.7.0\lib\net461\System.Drawing.Common.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
